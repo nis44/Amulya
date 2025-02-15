@@ -9,13 +9,13 @@ export default function Page() {
 
   const { data: orders, error, isLoading } = useOrders({ uid: user?.uid });
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center py-48">
-        <CircularProgress />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex justify-center py-48">
+  //       <CircularProgress />
+  //     </div>
+  //   );
+  // }
 
   if (error) {
     return <>{error}</>;
