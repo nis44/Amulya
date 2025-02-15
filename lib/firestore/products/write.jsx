@@ -1,4 +1,4 @@
-import { db, storage } from "@/lib/firebase";
+import { db } from "@/lib/firebase"; // Firebase Firestore remains the same
 import {
   collection,
   deleteDoc,
@@ -6,7 +6,31 @@ import {
   setDoc,
   Timestamp,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+const CLOUDINARY_UPLOAD_PRESET = "amulya_preset";
+const CLOUDINARY_CLOUD_NAME = "dgkhrnvli";
+
+// Function to upload image to Cloudinary
+const uploadToCloudinary = async (image) => {
+  const formData = new FormData();
+  formData.append("file", image);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to upload image to Cloudinary");
+  }
+
+  const data = await response.json();
+  return data.secure_url; // Cloudinary returns a secure URL for the uploaded image
+};
 
 export const createNewProduct = async ({ data, featureImage, imageList }) => {
   if (!data?.title) {
@@ -15,17 +39,13 @@ export const createNewProduct = async ({ data, featureImage, imageList }) => {
   if (!featureImage) {
     throw new Error("Feature Image is required");
   }
-  const featureImageRef = ref(storage, `products/${featureImage?.name}`);
-  await uploadBytes(featureImageRef, featureImage);
-  const featureImageURL = await getDownloadURL(featureImageRef);
 
+  const featureImageURL = await uploadToCloudinary(featureImage);
   let imageURLList = [];
 
   for (let i = 0; i < imageList?.length; i++) {
     const image = imageList[i];
-    const imageRef = ref(storage, `products/${image?.name}`);
-    await uploadBytes(imageRef, image);
-    const url = await getDownloadURL(imageRef);
+    const url = await uploadToCloudinary(image);
     imageURLList.push(url);
   }
 
@@ -51,18 +71,14 @@ export const updateProduct = async ({ data, featureImage, imageList }) => {
   let featureImageURL = data?.featureImageURL ?? "";
 
   if (featureImage) {
-    const featureImageRef = ref(storage, `products/${featureImage?.name}`);
-    await uploadBytes(featureImageRef, featureImage);
-    featureImageURL = await getDownloadURL(featureImageRef);
+    featureImageURL = await uploadToCloudinary(featureImage);
   }
 
   let imageURLList = imageList?.length === 0 ? data?.imageList : [];
 
   for (let i = 0; i < imageList?.length; i++) {
     const image = imageList[i];
-    const imageRef = ref(storage, `products/${image?.name}`);
-    await uploadBytes(imageRef, image);
-    const url = await getDownloadURL(imageRef);
+    const url = await uploadToCloudinary(image);
     imageURLList.push(url);
   }
 

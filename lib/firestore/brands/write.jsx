@@ -1,4 +1,4 @@
-import { db, storage } from "@/lib/firebase";
+import { db } from "@/lib/firebase"; // Firebase Firestore remains the same
 import {
   collection,
   deleteDoc,
@@ -7,7 +7,31 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+const CLOUDINARY_UPLOAD_PRESET = "amulya_preset";
+const CLOUDINARY_CLOUD_NAME = "dgkhrnvli";
+
+// Function to upload image to Cloudinary
+const uploadToCloudinary = async (image) => {
+  const formData = new FormData();
+  formData.append("file", image);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to upload image to Cloudinary");
+  }
+
+  const data = await response.json();
+  return data.secure_url; // Cloudinary returns a secure URL for the uploaded image
+};
 
 export const createNewBrand = async ({ data, image }) => {
   if (!image) {
@@ -18,9 +42,7 @@ export const createNewBrand = async ({ data, image }) => {
   }
 
   const newId = doc(collection(db, `ids`)).id;
-  const imageRef = ref(storage, `brands/${newId}`);
-  await uploadBytes(imageRef, image);
-  const imageURL = await getDownloadURL(imageRef);
+  const imageURL = await uploadToCloudinary(image);
 
   await setDoc(doc(db, `brands/${newId}`), {
     ...data,
@@ -42,9 +64,7 @@ export const updateBrand = async ({ data, image }) => {
   let imageURL = data?.imageURL;
 
   if (image) {
-    const imageRef = ref(storage, `brands/${id}`);
-    await uploadBytes(imageRef, image);
-    imageURL = await getDownloadURL(imageRef);
+    imageURL = await uploadToCloudinary(image);
   }
 
   await updateDoc(doc(db, `brands/${id}`), {
