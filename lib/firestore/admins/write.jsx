@@ -8,8 +8,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-const CLOUDINARY_UPLOAD_PRESET = "amulya_preset"; // Replace with your Cloudinary upload preset
-const CLOUDINARY_CLOUD_NAME = "dgkhrnvli"; // Replace with your Cloudinary cloud name
+const CLOUDINARY_UPLOAD_PRESET = "amulya_preset"; 
+const CLOUDINARY_CLOUD_NAME = "dgkhrnvli";
 
 // Function to upload image to Cloudinary
 const uploadToCloudinary = async (image) => {

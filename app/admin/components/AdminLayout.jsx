@@ -53,21 +53,21 @@ export default function AdminLayout({ children }) {
     );
   }
 
-  // if (!admin) {
-  //   return (
-  //     <div className="h-screen w-screen flex flex-col gap-2 justify-center items-center">
-  //       <h1 className="font-bold">You are not admin!</h1>
-  //       <h1 className="text-gray-600 text-sm">{user?.email}</h1>
-  //       <Button
-  //         onClick={async () => {
-  //           await signOut(auth);
-  //         }}
-  //       >
-  //         Logout
-  //       </Button>
-  //     </div>
-  //   );
-  // }
+  if (!admin) {
+    return (
+      <div className="h-screen w-screen flex flex-col gap-2 justify-center items-center">
+        <h1 className="font-bold">You are not admin!</h1>
+        <h1 className="text-gray-600 text-sm">{user?.email}</h1>
+        <Button
+          onClick={async () => {
+            await signOut(auth);
+          }}
+        >
+          Logout
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <main className="relative flex">

@@ -40,7 +40,8 @@ export default function Page() {
         photoURL: user?.photoURL,
       });
       toast.success("Successfully Sign Up");
-      router.push("/account");
+      // replace
+      router.replace("/");
     } catch (error) {
       toast.error(error?.message);
     }

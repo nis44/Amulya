@@ -41,7 +41,8 @@ export default function Page() {
 
   useEffect(() => {
     if (user) {
-      router.push("/account");
+      // replace 
+      router.replace("/");
     }
   }, [user]);
 
