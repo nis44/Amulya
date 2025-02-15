@@ -66,3 +66,5 @@ export const deleteCollection = async ({ id }) => {
   }
   await deleteDoc(doc(db, `collections/${id}`));
 };
+
+
