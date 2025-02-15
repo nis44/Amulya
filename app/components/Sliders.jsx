@@ -10,6 +10,7 @@ import AddToCartButton from "./AddToCartButton";
 
 export default function FeaturedProductSlider({ featuredProducts }) {
   var settings = {
+    screen:1,
     dots: true,
     infinite: true,
     speed: 500,
