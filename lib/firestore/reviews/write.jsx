@@ -17,7 +17,6 @@ export const addReview = async ({
     uid: uid ?? "",
     displayName: displayName ?? "",
     photoURL: photoURL ?? "",
-    timestamp: Timestamp.now(),
   });
 };
 

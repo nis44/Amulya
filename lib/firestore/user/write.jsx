@@ -7,7 +7,6 @@ export const createUser = async ({ uid, displayName, photoURL }) => {
     {
       displayName: displayName,
       photoURL: photoURL ?? "",
-      timestampCreate: Timestamp.now(),
     },
     { merge: true }
   );

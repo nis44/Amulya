@@ -48,7 +48,6 @@ export const createNewBrand = async ({ data, image }) => {
     ...data,
     id: newId,
     imageURL: imageURL,
-    timestampCreate: Timestamp.now(),
   });
 };
 
@@ -70,7 +69,6 @@ export const updateBrand = async ({ data, image }) => {
   await updateDoc(doc(db, `brands/${id}`), {
     ...data,
     imageURL: imageURL,
-    timestampUpdate: Timestamp.now(),
   });
 };
 

@@ -40,9 +40,9 @@ export default function ListView() {
           </tr>
         </thead>
         <tbody>
-          {admins?.map((item, index) => {
-            return <Row index={index} item={item} key={item?.id} />;
-          })}
+          {admins?.map((item, index) => (
+            <Row index={index} item={item} key={item?.id} />
+          ))}
         </tbody>
       </table>
     </div>
