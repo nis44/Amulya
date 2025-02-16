@@ -128,3 +128,45 @@ export const createCheckoutCODAndGetId = async ({ uid, products, address }) => {
 
   return checkoutId;
 };
+
+
+// export const createCheckoutCODAndGetId = async ({ uid, products, address }) => {
+//   try {
+//     const checkoutId = `cod_${doc(collection(db, `ids`)).id}`;
+    
+//     const ref = doc(db, `users/${uid}/checkout_sessions_cod/${checkoutId}`);
+    
+//     const line_items = products.map(item => ({
+//       price_data: {
+//         currency: "inr",
+//         product_data: {
+//           name: item?.product?.title || "Unknown Product",
+//           metadata: {
+//             productId: item?.id || "unknown"
+//           }
+//         },
+//         unit_amount: Math.round(item?.product?.salePrice * 100) || 0,
+//       },
+//       quantity: item?.quantity || 1,
+//     }));
+
+//     await setDoc(ref, {
+//       id: checkoutId,
+//       line_items,
+//       metadata: {
+//         checkoutId,
+//         uid,
+//         address: JSON.stringify(address),
+//         createdAt: serverTimestamp()
+//       },
+//       status: "pending",
+//     });
+
+//     console.log("COD checkout created with ID:", checkoutId);
+//     return checkoutId;
+
+//   } catch (error) {
+//     console.error("Error creating COD checkout:", error);
+//     throw new Error("Failed to create COD order");
+//   }
+// };
