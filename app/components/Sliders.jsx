@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@nextui-org/react";
+import { Heart } from "lucide-react";
 import Link from "next/link";
 import Slider from "react-slick";
 import FavoriteButton from "./FavoriteButton";
