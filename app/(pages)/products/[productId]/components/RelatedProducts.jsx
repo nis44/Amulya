@@ -1,17 +1,32 @@
 import { ProductCard } from "@/app/components/Products";
 import { getProductsByCategory } from "@/lib/firestore/products/read_server";
 
-export default async function RelatedProducts({ categoryId }) {
-  const products = await getProductsByCategory({ categoryId: categoryId });
+export default async function RelatedProducts({ categoryId, currentProductId }) {
+  const products = await getProductsByCategory({ categoryId });
+  const filteredProducts = products?.filter(p => p.id !== currentProductId);
+
   return (
-    <div className="w-full flex justify-center">
-      <div className="flex flex-col gap-5 max-w-[900px] p-5">
-        <h1 className="text-center font-semibold text-lg">Related Products</h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-          {products?.map((item) => {
-            return <ProductCard product={item} key={item?.id} />;
-          })}
-        </div>
+    <div className="w-full bg-[#F9F6F4] py-12 border-t border-[#EBD1C4]">
+      <div className="max-w-7xl mx-auto px-4">
+        <h2 className="font-serif text-3xl font-bold text-[#5E121D] text-center mb-8">
+          Complete Your Look
+        </h2>
+        
+        {filteredProducts?.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredProducts.slice(0, 4).map((item) => (
+              <ProductCard 
+                key={item.id}
+                product={item}
+                className="hover:-translate-y-2 transition-transform duration-300"
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-[#5E121D]/60 py-12">
+            No related jewelry pieces found
+          </div>
+        )}
       </div>
     </div>
   );

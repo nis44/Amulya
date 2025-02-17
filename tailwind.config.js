@@ -14,6 +14,9 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      aspectRatio: {
+        square: '1 / 1',
+      },
     },
   },
   darkMode: "class",

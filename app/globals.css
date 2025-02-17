@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
 
 
 /* Custom scrollbar for menu list */
@@ -14,3 +16,16 @@
     background: #EBD1C4;
     border-radius: 3px;
   }
+
+  /* Custom thin scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F9F6F4;
+}
+::-webkit-scrollbar-thumb {
+  background: #EBD1C4;
+  border-radius: 3px;
+}
