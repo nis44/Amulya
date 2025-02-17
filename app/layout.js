@@ -17,7 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "E Commerce Website",
+  title: "Amulya",
   description: "Create By Docs Readers",
 };
 

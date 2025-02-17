@@ -73,76 +73,97 @@ export default function Form() {
   };
 
   return (
-    <div className="flex flex-col gap-3 bg-white rounded-xl p-5 w-full md:w-[400px]">
-      <h1 className="font-semibold">{id ? "Update" : "Create"} Admin</h1>
-      <form
-        onSubmit={(e) => {
+    <div className="flex flex-col gap-6 bg-white rounded-xl shadow-sm border border-[#EBD1C4] p-6 w-full md:max-w-md">
+      <h1 className="text-2xl font-serif font-bold text-[#5E121D] border-b border-[#EBD1C4] pb-3">
+        {id ? "Update Admin Profile" : "Create New Admin"}
+      </h1>
+
+      <form onSubmit={(e) => {
           e.preventDefault();
-          if (id) {
-            handleUpdate();
-          } else {
-            handleCreate();
-          }
+          id ? handleUpdate() : handleCreate();
         }}
-        className="flex flex-col gap-3"
+        className="flex flex-col gap-4"
       >
-        <div className="flex flex-col gap-1">
-          <label htmlFor="brand-name" className="text-gray-500 text-sm">
-            Image <span className="text-red-500">*</span>{" "}
+        {/* Image Upload Section */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-[#5E121D]/80 uppercase tracking-wide">
+            Profile Image <span className="text-red-500">*</span>
           </label>
-          {image && (
-            <div className="flex justify-center items-center p-3">
-              <img className="h-20" src={URL.createObjectURL(image)} alt="" />
-            </div>
-          )}
-          <input
-            onChange={(e) => {
-              if (e.target.files.length > 0) {
-                setImage(e.target.files[0]);
-              }
-            }}
-            id="admin-image"
-            name="admin-image"
-            type="file"
-            className="border px-4 py-2 rounded-lg w-full"
-          />
+          <div className="border-2 border-dashed border-[#EBD1C4] rounded-xl hover:border-[#5E121D] transition-colors">
+            <label 
+              htmlFor="admin-image"
+              className="cursor-pointer block p-4"
+            >
+              {image || data?.imageURL ? (
+                <div className="relative">
+                  <img
+                    className="h-32 w-full object-cover rounded-lg"
+                    src={image ? URL.createObjectURL(image) : data?.imageURL}
+                    alt="Admin preview"
+                  />
+                  <div className="absolute inset-0 bg-[#5E121D]/80 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+                    <span className="text-white font-medium">Change Image</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-32 text-[#5E121D]/50">
+                  <span className="text-4xl">+</span>
+                  <p className="mt-2 text-sm">Upload Image</p>
+                  <p className="text-xs">Recommended: Square aspect ratio</p>
+                </div>
+              )}
+            </label>
+            <input
+              type="file"
+              id="admin-image"
+              className="hidden"
+              onChange={(e) => e.target.files[0] && setImage(e.target.files[0])}
+              accept="image/*"
+            />
+          </div>
         </div>
+
+        {/* Name Input */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="admin-name" className="text-gray-500 text-sm">
-            Name <span className="text-red-500">*</span>{" "}
+          <label className="text-sm font-medium text-[#5E121D]/80 uppercase tracking-wide">
+            Full Name <span className="text-red-500">*</span>
           </label>
           <input
             id="admin-name"
-            name="admin-name"
             type="text"
-            placeholder="Enter Name"
+            placeholder="John Doe"
             value={data?.name ?? ""}
-            onChange={(e) => {
-              handleData("name", e.target.value);
-            }}
-            className="border px-4 py-2 rounded-lg w-full focus:outline-none"
+            onChange={(e) => handleData("name", e.target.value)}
+            className="border border-[#EBD1C4] px-4 py-2.5 rounded-lg focus:border-[#5E121D] focus:ring-1 focus:ring-[#5E121D] placeholder-[#5E121D]/50"
             required
           />
         </div>
+
+        {/* Email Input */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="admin-email" className="text-gray-500 text-sm">
-            Email <span className="text-red-500">*</span>{" "}
+          <label className="text-sm font-medium text-[#5E121D]/80 uppercase tracking-wide">
+            Email Address <span className="text-red-500">*</span>
           </label>
           <input
             id="admin-email"
-            name="admin-email"
             type="email"
-            placeholder="Enter Email"
+            placeholder="john@example.com"
             value={data?.email ?? ""}
-            onChange={(e) => {
-              handleData("email", e.target.value);
-            }}
-            className="border px-4 py-2 rounded-lg w-full focus:outline-none"
+            onChange={(e) => handleData("email", e.target.value)}
+            className="border border-[#EBD1C4] px-4 py-2.5 rounded-lg focus:border-[#5E121D] focus:ring-1 focus:ring-[#5E121D] placeholder-[#5E121D]/50"
             required
           />
         </div>
-        <Button isLoading={isLoading} isDisabled={isLoading} type="submit">
-          {id ? "Update" : "Create"}
+
+        {/* Submit Button */}
+        <Button 
+          type="submit"
+          isLoading={isLoading}
+          className={`bg-black text-white px-6 py-3 rounded-lg hover:bg-[#8A1A2B] transition-colors ${
+            isLoading ? 'opacity-80' : ''
+          }`}
+        >
+          {id ? "Save Changes" : "Create Admin"}
         </Button>
       </form>
     </div>

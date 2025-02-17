@@ -13,38 +13,50 @@ export default function ListView() {
 
   if (isLoading) {
     return (
-      <div>
-        <CircularProgress />
+      <div className="h-96 flex items-center justify-center">
+        <CircularProgress 
+          classNames={{
+            svg: "w-16 h-16",
+            track: "stroke-[#EBD1C4]",
+            indicator: "stroke-[#5E121D]"
+          }}
+        />
       </div>
     );
   }
+
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="bg-[#F9F6F4] p-6 rounded-xl text-center text-[#5E121D] font-medium">
+        {error}
+      </div>
+    );
   }
+
   return (
-    <div className="flex-1 flex flex-col gap-3 md:pr-5 md:px-0 px-5 rounded-xl">
-      <h1 className="text-xl">Admins</h1>
-      <table className="border-separate border-spacing-y-3">
-        <thead>
-          <tr>
-            <th className="font-semibold border-y bg-white px-3 py-2 border-l rounded-l-lg">
-              SN
-            </th>
-            <th className="font-semibold border-y bg-white px-3 py-2">Image</th>
-            <th className="font-semibold border-y bg-white px-3 py-2 text-left">
-              Name
-            </th>
-            <th className="font-semibold border-y bg-white px-3 py-2 border-r rounded-r-lg text-center">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {admins?.map((item, index) => {
-            return <Row index={index} item={item} key={item?.id} />;
-          })}
-        </tbody>
-      </table>
+    <div className="flex-1 flex flex-col gap-6 bg-white rounded-xl shadow-sm border border-[#EBD1C4] p-6">
+      <h1 className="text-2xl font-serif font-bold text-[#5E121D] border-b border-[#EBD1C4] pb-3">
+        Admin Management
+      </h1>
+      
+      <div className="overflow-x-auto custom-scrollbar">
+        <table className="w-full border-collapse">
+          <thead className="bg-[#F9F6F4]">
+            <tr>
+              <th className="px-4 py-3 text-left text-sm font-medium text-[#5E121D] rounded-l-lg">SN</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-[#5E121D]">Profile</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-[#5E121D]">Details</th>
+              <th className="px-4 py-3 text-center text-sm font-medium text-[#5E121D] rounded-r-lg">Actions</th>
+            </tr>
+          </thead>
+          
+          <tbody className="divide-y divide-[#EBD1C4]">
+            {admins?.map((item, index) => (
+              <Row key={item?.id} item={item} index={index} />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -54,61 +66,58 @@ function Row({ item, index }) {
   const router = useRouter();
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure?")) return;
-
+    if (!confirm("Permanently delete this admin?")) return;
     setIsDeleting(true);
     try {
       await deleteAdmin({ id: item?.id });
-      toast.success("Successfully Deleted");
+      toast.success("Admin deleted successfully");
     } catch (error) {
       toast.error(error?.message);
     }
     setIsDeleting(false);
   };
 
-  const handleUpdate = () => {
-    router.push(`/admin/admins?id=${item?.id}`);
-  };
+  const handleUpdate = () => router.push(`/admin/admins?id=${item?.id}`);
 
   return (
-    <tr>
-      <td className="border-y bg-white px-3 py-2 border-l rounded-l-lg text-center">
+    <tr className="hover:bg-[#F9F6F4] transition-colors">
+      <td className="px-4 py-3 text-center text-sm text-[#5E121D] font-mono">
         {index + 1}
       </td>
-      <td className="border-y bg-white px-3 py-2 text-center">
-        <div className="flex justify-center">
+      
+      <td className="px-4 py-3">
+        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#EBD1C4]">
           <img
-            className="h-10 w-10 object-cover rounded-lg"
+            className="w-full h-full object-cover"
             src={item?.imageURL}
-            alt=""
+            alt={item?.name}
           />
         </div>
       </td>
-      <td className="border-y bg-white px-3 py-2">
-        <div className="flex flex-col">
-          <h2>{item?.name}</h2>
-          <h3 className="text-xs text-gray-500">{item?.email}</h3>
-        </div>
+      
+      <td className="px-4 py-3">
+        <p className="text-[#5E121D] font-medium">{item?.name}</p>
+        <p className="text-sm text-[#8A1A2B]">{item?.email}</p>
       </td>
-      <td className="border-y bg-white px-3 py-2 border-r rounded-r-lg">
-        <div className="flex gap-2 items-center">
+      
+      <td className="px-4 py-3">
+        <div className="flex gap-2 justify-center">
           <Button
             onClick={handleUpdate}
-            isDisabled={isDeleting}
             isIconOnly
             size="sm"
+            className="bg-green-300 text-[#5E121D] hover:bg-[#5E121D] hover:text-white"
           >
-            <Edit2 size={13} />
+            <Edit2 size={16} />
           </Button>
           <Button
             onClick={handleDelete}
             isLoading={isDeleting}
-            isDisabled={isDeleting}
             isIconOnly
             size="sm"
-            color="danger"
+            className="text-[#EBD1C4] bg-red-600 hover:text-black"
           >
-            <Trash2 size={13} />
+            <Trash2 size={16} />
           </Button>
         </div>
       </td>
