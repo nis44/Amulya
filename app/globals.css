@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Custom scrollbar for menu list */
+::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #5E121D;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #EBD1C4;
+    border-radius: 3px;
+  }

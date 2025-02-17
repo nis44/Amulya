@@ -12,6 +12,7 @@ import {
 } from "@/lib/firestore/products/write";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getProduct } from "@/lib/firestore/products/read_server";
+import { Save, Plus } from "lucide-react";
 
 export default function Page() {
   const [data, setData] = useState(null);
@@ -102,29 +103,46 @@ export default function Page() {
           handleCreate();
         }
       }}
-      className="flex flex-col gap-4 p-5"
+      className="flex flex-col gap-6 p-6 bg-[#F9F6F4] min-h-screen"
     >
-      <div className="flex justify-between w-full items-center">
-        <h1 className="font-semibold">
+      <div className="flex justify-between items-center bg-white rounded-xl p-4 shadow-sm border border-[#EBD1C4]">
+        <h1 className="text-2xl font-serif font-bold text-[#5E121D]">
           {id ? "Update Product" : "Create New Product"}
         </h1>
-        <Button isLoading={isLoading} isDisabled={isLoading} type="submit">
-          {id ? "Update" : "Create"}
+        <Button 
+          isLoading={isLoading} 
+          isDisabled={isLoading} 
+          type="submit"
+          className="bg-[#5E121D] text-white px-6 py-3 hover:bg-[#8A1A2B] transition-colors"
+          startContent={!isLoading && (id ? <Save size={18} /> : <Plus size={18} />)}
+        >
+          {id ? "Save Changes" : "Create Product"}
         </Button>
       </div>
-      <div className="flex flex-col md:flex-row gap-5">
-        <div className="flex-1 flex">
-          <BasicDetails data={data} handleData={handleData} />
+
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Left Column */}
+        <div className="flex-1 space-y-6">
+          <div className="bg-white rounded-xl p-5 shadow-sm border border-[#EBD1C4]">
+            <BasicDetails data={data} handleData={handleData} />
+          </div>
         </div>
-        <div className="flex-1 flex flex-col gap-5 h-full">
-          <Images
-            data={data}
-            featureImage={featureImage}
-            setFeatureImage={setFeatureImage}
-            imageList={imageList}
-            setImageList={setImageList}
-          />
-          <Description data={data} handleData={handleData} />
+
+        {/* Right Column */}
+        <div className="flex-1 space-y-6">
+          <div className="bg-white rounded-xl p-5 shadow-sm border border-[#EBD1C4]">
+            <Images
+              data={data}
+              featureImage={featureImage}
+              setFeatureImage={setFeatureImage}
+              imageList={imageList}
+              setImageList={setImageList}
+            />
+          </div>
+          
+          <div className="bg-white rounded-xl p-5 shadow-sm border border-[#EBD1C4]">
+            <Description data={data} handleData={handleData} />
+          </div>
         </div>
       </div>
     </form>

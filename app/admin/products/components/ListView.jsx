@@ -43,85 +43,85 @@ export default function ListView() {
 
   if (isLoading) {
     return (
-      <div>
-        <CircularProgress />
+      <div className="h-96 flex items-center justify-center">
+        <CircularProgress 
+          classNames={{
+            svg: "w-16 h-16",
+            track: "stroke-[#EBD1C4]",
+            indicator: "stroke-[#5E121D]"
+          }}
+        />
       </div>
     );
   }
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="bg-[#F9F6F4] p-6 rounded-xl text-center">
+        <p className="text-[#5E121D] font-medium">{error}</p>
+      </div>
+    );
   }
   return (
-    <div className="flex-1 flex flex-col gap-3 md:pr-5 md:px-0 px-5 rounded-xl w-full overflow-x-auto">
-      <table className="border-separate border-spacing-y-3">
-        <thead>
-          <tr>
-            <th className="font-semibold border-y bg-white px-3 py-2 border-l rounded-l-lg">
-              SN
-            </th>
-            <th className="font-semibold border-y bg-white px-3 py-2">Image</th>
-            <th className="font-semibold border-y bg-white px-3 py-2 text-left">
-              Title
-            </th>
-            <th className="font-semibold border-y bg-white px-3 py-2 text-left">
-              Price
-            </th>
-            <th className="font-semibold border-y bg-white px-3 py-2 text-left">
-              Stock
-            </th>
-            <th className="font-semibold border-y bg-white px-3 py-2 text-left">
-              Orders
-            </th>
-            <th className="font-semibold border-y bg-white px-3 py-2 text-left">
-              Status
-            </th>
-            <th className="font-semibold border-y bg-white px-3 py-2 border-r rounded-r-lg text-center">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {products?.map((item, index) => {
-            return (
+    <div className="flex-1 flex flex-col gap-4 rounded-xl w-full">
+      <div className="overflow-x-auto custom-scrollbar">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr>
+              {["SN", "Image", "Product", "Price", "Stock", "Orders", "Status", "Actions"].map((header, idx) => (
+                <th
+                  key={header}
+                  className={`px-4 py-3 text-left text-sm font-serif font-bold text-[#5E121D] bg-[#F9F6F4]
+                    ${idx === 0 ? "rounded-l-lg" : ""} 
+                    ${idx === 7 ? "rounded-r-lg" : ""}`}
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          
+          <tbody className="space-y-2">
+            {products?.map((item, index) => (
               <Row
-                index={index + lastSnapDocList?.length * pageLimit}
-                item={item}
                 key={item?.id}
+                item={item}
+                index={index + lastSnapDocList?.length * pageLimit}
               />
-            );
-          })}
-        </tbody>
-      </table>
-      <div className="flex justify-between text-sm py-3">
-        <Button
-          isDisabled={isLoading || lastSnapDocList?.length === 0}
-          onClick={handlePrePage}
-          size="sm"
-          variant="bordered"
-        >
-          Previous
-        </Button>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between px-4 py-3 bg-[#F9F6F4] rounded-lg">
+        <div className="flex gap-2">
+          <Button
+            className="bg-white text-[#5E121D] border border-[#EBD1C4] hover:bg-[#EBD1C4] px-4 py-2"
+            isDisabled={isLoading || lastSnapDocList?.length === 0}
+            onClick={handlePrePage}
+          >
+            Previous
+          </Button>
+          <Button
+            className="bg-white text-[#5E121D] border border-[#EBD1C4] hover:bg-[#EBD1C4] px-4 py-2"
+            isDisabled={isLoading || products?.length === 0}
+            onClick={handleNextPage}
+          >
+            Next
+          </Button>
+        </div>
+        
         <select
           value={pageLimit}
-          onChange={(e) => setPageLimit(e.target.value)}
-          className="px-5 rounded-xl"
-          name="perpage"
-          id="perpage"
+          onChange={(e) => setPageLimit(Number(e.target.value))}
+          className="bg-white border border-[#EBD1C4] text-[#5E121D] rounded-lg px-4 py-2 focus:ring-1 focus:ring-[#5E121D]"
         >
-          <option value={3}>3 Items</option>
-          <option value={5}>5 Items</option>
-          <option value={10}>10 Items</option>
-          <option value={20}>20 Items</option>
-          <option value={100}>100 Items</option>
+          {[3, 5, 10, 20, 100].map((opt) => (
+            <option key={opt} value={opt} className="text-[#5E121D]">
+              Show {opt}
+            </option>
+          ))}
         </select>
-        <Button
-          isDisabled={isLoading || products?.length === 0}
-          onClick={handleNextPage}
-          size="sm"
-          variant="bordered"
-        >
-          Next
-        </Button>
       </div>
     </div>
   );
@@ -149,70 +149,81 @@ function Row({ item, index }) {
   };
 
   return (
-    <tr>
-      <td className="border-y bg-white px-3 py-2 border-l rounded-l-lg text-center">
-        {index + 1}
-      </td>
-      <td className="border-y bg-white px-3 py-2 text-center">
-        <div className="flex justify-center">
+    <tr className="group hover:bg-[#F9F6F4] transition-colors">
+      {/* SN */}
+      <td className="px-4 py-3 text-[#5E121D] font-medium">{index + 1}</td>
+      
+      {/* Image */}
+      <td className="px-4 py-3">
+        <div className="w-16 h-16 rounded-lg overflow-hidden border border-[#EBD1C4]">
           <img
-            className="h-10 w-10 object-cover"
+            className="w-full h-full object-cover"
             src={item?.featureImageURL}
-            alt=""
+            alt={item?.title}
           />
         </div>
       </td>
-      <td className="border-y bg-white px-3 py-2 whitespace-nowrap">
-        {item?.title}{" "}
-        {item?.isFeatured === true && (
-          <span className="ml-2 bg-gradient-to-tr from-blue-500 to-indigo-400 text-white text-[10px] rounded-full px-3 py-1">
-            Featured
-          </span>
-        )}
-      </td>
-      <td className="border-y bg-white px-3 py-2  whitespace-nowrap">
-        {item?.salePrice < item?.price && (
-          <span className="text-xs text-gray-500 line-through">
-            ₹ {item?.price}
-          </span>
-        )}{" "}
-        ₹ {item?.salePrice}
-      </td>
-      <td className="border-y bg-white px-3 py-2">{item?.stock}</td>
-      <td className="border-y bg-white px-3 py-2">{item?.orders ?? 0}</td>
-      <td className="border-y bg-white px-3 py-2">
-        <div className="flex">
-          {item?.stock - (item?.orders ?? 0) > 0 && (
-            <div className="px-2 py-1 text-xs text-green-500 bg-green-100 font-bold rounded-md">
-              Available
-            </div>
-          )}
-          {item?.stock - (item?.orders ?? 0) <= 0 && (
-            <div className="px-2 py-1 text-xs text-red-500 bg-red-100 rounded-md">
-              Out Of Stock
-            </div>
+      
+      {/* Title */}
+      <td className="px-4 py-3">
+        <div className="flex items-center gap-2">
+          <span className="text-[#5E121D] font-medium">{item?.title}</span>
+          {item?.isFeatured && (
+            <span className="bg-[#5E121D] text-white text-xs px-2 py-1 rounded-full">
+              Featured
+            </span>
           )}
         </div>
       </td>
-      <td className="border-y bg-white px-3 py-2 border-r rounded-r-lg">
-        <div className="flex gap-2 items-center">
+      
+      {/* Price */}
+      <td className="px-4 py-3">
+        <div className="flex flex-col">
+          {item?.salePrice < item?.price && (
+            <span className="text-xs text-[#8A1A2B] line-through">
+              ₹{item?.price}
+            </span>
+          )}
+          <span className="text-[#5E121D] font-medium">
+            ₹{item?.salePrice}
+          </span>
+        </div>
+      </td>
+      
+      {/* Stock */}
+      <td className="px-4 py-3 text-[#5E121D]">{item?.stock}</td>
+      
+      {/* Orders */}
+      <td className="px-4 py-3 text-[#5E121D]">{item?.orders ?? 0}</td>
+      
+      {/* Status */}
+      <td className="px-4 py-3">
+        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+          item?.stock - (item?.orders ?? 0) > 0 
+            ? "bg-green-100 text-green-800"
+            : "bg-red-100 text-red-800"
+        }`}>
+          {item?.stock - (item?.orders ?? 0) > 0 ? "In Stock" : "Out of Stock"}
+        </span>
+      </td>
+      
+      {/* Actions */}
+      <td className="px-4 py-3">
+        <div className="flex gap-2">
           <Button
             onClick={handleUpdate}
-            isDisabled={isDeleting}
             isIconOnly
-            size="sm"
+            className="bg-[#EBD1C4] text-[#5E121D] hover:bg-[#5E121D] hover:text-white"
           >
-            <Edit2 size={13} />
+            <Edit2 size={16} />
           </Button>
           <Button
             onClick={handleDelete}
             isLoading={isDeleting}
-            isDisabled={isDeleting}
             isIconOnly
-            size="sm"
-            color="danger"
+            className="bg-[#EBD1C4] text-red-600 hover:bg-red-100"
           >
-            <Trash2 size={13} />
+            <Trash2 size={16} />
           </Button>
         </div>
       </td>
