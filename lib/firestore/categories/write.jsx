@@ -50,6 +50,7 @@ export const createNewCategory = async ({ data, image }) => {
     ...data,
     id: newId,
     imageURL: imageURL,
+    timestampCreate: Timestamp.now(),
   });
 };
 
@@ -74,6 +75,7 @@ export const updateCategory = async ({ data, image }) => {
   await updateDoc(doc(db, `categories/${id}`), {
     ...data,
     imageURL: imageURL,
+    timestampUpdate: Timestamp.now(),
   });
 };
 

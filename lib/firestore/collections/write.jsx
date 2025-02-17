@@ -51,6 +51,7 @@ export const createNewCollection = async ({ data, image }) => {
     ...data,
     id: newId,
     imageURL: imageURL,
+    timestampCreate: Timestamp.now(),
   });
 };
 
@@ -75,6 +76,7 @@ export const updateCollection = async ({ data, image }) => {
   await updateDoc(doc(db, `collections/${id}`), {
     ...data,
     imageURL: imageURL,
+    timestampUpdate: Timestamp.now(),
   });
 };
 

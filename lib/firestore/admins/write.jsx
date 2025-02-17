@@ -53,6 +53,7 @@ export const createNewAdmin = async ({ data, image }) => {
     ...data,
     id: newId,
     imageURL: imageURL,
+    timestampCreate: Timestamp.now(),
   });
 };
 
@@ -79,6 +80,7 @@ export const updateAdmin = async ({ data, image }) => {
     await updateDoc(doc(db, `admins/${id}`), {
       ...data,
       imageURL: imageURL,
+      timestampUpdate: Timestamp.now(),
     });
   } else {
     const newId = data?.email;
@@ -89,6 +91,7 @@ export const updateAdmin = async ({ data, image }) => {
       ...data,
       id: newId,
       imageURL: imageURL,
+      timestampUpdate: Timestamp.now(),
     });
   }
 };

@@ -56,6 +56,7 @@ export const createNewProduct = async ({ data, featureImage, imageList }) => {
     featureImageURL: featureImageURL,
     imageList: imageURLList,
     id: newId,
+    timestampCreate: Timestamp.now(),
   });
 };
 
@@ -85,6 +86,7 @@ export const updateProduct = async ({ data, featureImage, imageList }) => {
     ...data,
     featureImageURL: featureImageURL,
     imageList: imageURLList,
+    timestampUpdate: Timestamp.now(),
   });
 };
 

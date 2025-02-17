@@ -124,6 +124,7 @@ export const createCheckoutCODAndGetId = async ({ uid, products, address }) => {
       uid: uid,
       address: JSON.stringify(address),
     },
+    createdAt: Timestamp.now(),
   });
 
   return checkoutId;

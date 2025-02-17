@@ -26,9 +26,9 @@ export default function Header() {
         <img className="h-4 md:h-5" src="/logo.png" alt="Logo" />
       </Link>
       <div className="hidden md:flex gap-2 items-center font-semibold">
-        {menuList?.map((item, index) => {
+        {menuList?.map((item) => {
           return (
-            <Link key={index} href={item?.link}>
+            <Link href={item?.link}>
               <button className="text-sm px-4 py-2 rounded-lg hover:bg-gray-50">
                 {item?.name}
               </button>
