@@ -1,16 +1,32 @@
 import { db } from "@/lib/firebase";
-import {
+import { 
   average,
   collection,
-  count,
   getAggregateFromServer,
+  count
 } from "firebase/firestore";
 
 export const getProductReviewCounts = async ({ productId }) => {
-  const ref = collection(db, `products/${productId}/reviews`);
-  const data = await getAggregateFromServer(ref, {
-    totalReviews: count(),
-    averageRating: average("rating"),
-  });
-  return data.data();
+  try {
+    const reviewsRef = collection(db, `products/${productId}/reviews`);
+    
+    const snapshot = await getAggregateFromServer(reviewsRef, {
+      totalReviews: count(),
+      averageRating: average('rating')
+    });
+
+    const data = snapshot.data();
+    
+    return {
+      totalReviews: data.totalReviews ?? 0,
+      averageRating: data.averageRating ?? 0
+    };
+    
+  } catch (error) {
+    console.error("Error fetching review aggregates:", error);
+    return {
+      totalReviews: 0,
+      averageRating: 0
+    };
+  }
 };

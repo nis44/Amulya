@@ -35,7 +35,7 @@ export default function FeaturedProductSlider({ featuredProducts }) {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 4000,
-    // fade: true,
+    fade: true,
     nextArrow: <CustomArrow direction="right" />,
     prevArrow: <CustomArrow direction="left" />,
     appendDots: dots => (
@@ -51,8 +51,9 @@ export default function FeaturedProductSlider({ featuredProducts }) {
   return (
     <>
     <div className="relative overflow-hidden bg-[#5E121D] py-16">
-    <div className="absolute inset-0 border-[3px] border-[#EBD1C4] m-3 pointer-events-none" />
-    <div className="absolute inset-0 border-[3px] border-[#EBD1C4] m-6 pointer-events-none" />
+    {/* <div className="absolute inset-0 border-[3px] border-[#EBD1C4] m-3 pointer-events-none" /> */}
+    <div className="absolute inset-0 border-[7px] border-[#EBD1C4] m-6 pointer-events-none" />
+    <div className="absolute inset-0 border-[3px] border-[#EBD1C4] m-10 pointer-events-none" />
       <Slider {...settings}>
         {featuredProducts?.map((product) => (
           <div key={product.id} className="relative group">

@@ -6,9 +6,12 @@ import { updateCarts } from "@/lib/firestore/user/write";
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { ShoppingCart, ShoppingBasket } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+// Brand color variables
+const MAROON = "#5E121D";
+const PEACH = "#EBD1C4";
 
 export default function AddToCartButton({ productId, type }) {
   const { user } = useAuth();
@@ -18,39 +21,55 @@ export default function AddToCartButton({ productId, type }) {
 
   const isAdded = data?.carts?.find((item) => item?.id === productId);
 
-  const handlClick = async () => {
+  const handleClick = async () => {
     setIsLoading(true);
     try {
       if (!user?.uid) {
         router.push("/login");
-        throw new Error("Please Logged In First!");
+        throw new Error("Please log in to continue");
       }
-      if (isAdded) {
-        const newList = data?.carts?.filter((item) => item?.id != productId);
-        await updateCarts({ list: newList, uid: user?.uid });
-      } else {
-        await updateCarts({
-          list: [...(data?.carts ?? []), { id: productId, quantity: 1 }],
-          uid: user?.uid,
-        });
-      }
+      
+      const newList = isAdded
+        ? data?.carts?.filter((item) => item?.id !== productId)
+        : [...(data?.carts ?? []), { id: productId, quantity: 1 }];
+
+      await updateCarts({ list: newList, uid: user.uid });
+      
+      toast.success(isAdded ? "Removed from cart" : "Added to cart", {
+        style: {
+          background: MAROON,
+          color: PEACH,
+          border: `1px solid ${PEACH}`
+        }
+      });
+      
     } catch (error) {
-      toast.error(error?.message);
+      toast.error(error?.message, {
+        style: {
+          background: PEACH,
+          color: MAROON,
+          border: `1px solid ${MAROON}`
+        }
+      });
     }
     setIsLoading(false);
   };
+
+  const baseStyles = `transition-colors duration-300 ${
+    isAdded 
+      ? `bg-[${MAROON}] text-[${PEACH}] hover:bg-[${PEACH}] hover:text-[${MAROON}]`
+      : `bg-[${PEACH}] text-[${MAROON}] hover:bg-[${MAROON}] hover:text-[${PEACH}]`
+  }`;
 
   if (type === "cute") {
     return (
       <Button
         isLoading={isLoading}
         isDisabled={isLoading}
-        onClick={handlClick}
-        variant="bordered"
-        className=""
+        onClick={handleClick}
+        className={`${baseStyles} border-2 border-[${MAROON}] rounded-full font-medium`}
       >
-        {!isAdded && "Add To Cart"}
-        {isAdded && "Click To Remove"}
+        {isAdded ? "Remove from Cart" : "Add to Cart"}
       </Button>
     );
   }
@@ -60,16 +79,17 @@ export default function AddToCartButton({ productId, type }) {
       <Button
         isLoading={isLoading}
         isDisabled={isLoading}
-        onClick={handlClick}
-        variant="bordered"
-        className=""
-        color="primary"
-        size="sm"
+        onClick={handleClick}
+        className={`${baseStyles} px-8 py-6 rounded-xl text-lg font-medium gap-2`}
+        startContent={
+          isAdded ? (
+            <ShoppingBasket className="w-5 h-5" />
+          ) : (
+            <ShoppingCart className="w-5 h-5" />
+          )
+        }
       >
-        {!isAdded && <AddShoppingCartIcon className="text-xs" />}
-        {isAdded && <ShoppingCartIcon className="text-xs" />}
-        {!isAdded && "Add To Cart"}
-        {isAdded && "Click To Remove"}
+        {isAdded ? "In Cart" : "Add to Cart"}
       </Button>
     );
   }
@@ -78,13 +98,15 @@ export default function AddToCartButton({ productId, type }) {
     <Button
       isLoading={isLoading}
       isDisabled={isLoading}
-      onClick={handlClick}
-      variant="flat"
+      onClick={handleClick}
       isIconOnly
-      size="sm"
+      className={`${baseStyles} rounded-full p-3`}
     >
-      {!isAdded && <AddShoppingCartIcon className="text-xs" />}
-      {isAdded && <ShoppingCartIcon className="text-xs" />}
+      {isAdded ? (
+        <ShoppingBasket className="w-5 h-5" />
+      ) : (
+        <ShoppingCart className="w-5 h-5" />
+      )}
     </Button>
   );
 }

@@ -49,10 +49,10 @@ export default function FavoriteButton({ productId }) {
       color="danger"
       className="rounded-full"
       isIconOnly
-      size="sm"
+      size="md"
     >
-      {!isLiked && <FavoriteBorderOutlinedIcon fontSize="small" />}
-      {isLiked && <FavoriteIcon fontSize="small" />}
+      {!isLiked && <FavoriteBorderOutlinedIcon fontSize="large" />}
+      {isLiked && <FavoriteIcon fontSize="large" />}
     </Button>
   );
 }

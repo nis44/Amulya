@@ -17,7 +17,6 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
-import logo from './logo1.png';
 
 export default function Sidebar() {
   const menuList = [
@@ -71,8 +70,8 @@ export default function Sidebar() {
     <section className="sticky top-0 flex flex-col gap-10 bg-[#5E121D] border-r border-[#EBD1C4]/20 px-5 py-3 h-screen overflow-hidden w-[260px] z-50">
     <div className="flex justify-center py-4">
       <Link href={`/`}>
-        {/* <img className="h-8 filter brightness-0 invert-[1]" src={logo} alt="Website Logo" />
-         */}
+        {/* <img className="h-8  brightness-100" src='/logo.png' alt="Website Logo" /> */}
+        
                <div className="text-2xl font-bold text-[#EBD1C4] font-playfair">
         Amulya
       </div>

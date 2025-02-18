@@ -10,7 +10,6 @@ import Categories from "./components/Categories";
 import { getCategories } from "@/lib/firestore/categories/read_server";
 import ProductsGridView from "./components/Products";
 import CustomerReviews from "./components/CustomerReviews";
-import Brands from "./components/Brands";
 import { getBrands } from "@/lib/firestore/brands/read_server";
 import Footer from "./components/Footer";
 
@@ -34,7 +33,6 @@ export default async function Home() {
       <Categories categories={categories} />
       <ProductsGridView products={products} />
       <CustomerReviews />
-      <Brands brands={brands} />
       <Footer />
     </main>
   );
