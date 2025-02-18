@@ -110,7 +110,6 @@ export default function FeaturedProductSlider({ featuredProducts }) {
                     src={product?.featureImageURL}
                     alt={product?.title}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#5E121D]/80 to-transparent z-20" />
                 </div>
               </div>
             </div>
